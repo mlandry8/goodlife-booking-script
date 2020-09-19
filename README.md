@@ -2,6 +2,8 @@
 
 Book goodlife gym sessions before they fill up!
 
+This script currently assumes you only have one gym favourited
+
 **Setup**
 
 1. run `cp .env.example .env`
