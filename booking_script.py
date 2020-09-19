@@ -31,7 +31,7 @@ def wait_for_element_by(browser, element_name, element_type):
         print ("Loading took too much time!")
 
 
-def book_gym_session(browser, time, dry_run=False):
+def book_gym_session(browser, day, time, dry_run=False):
     # navigate to login page (will redirect to bookings page)
     browser.get('https://www.goodlifefitness.com/members/bookings/workout')
 
@@ -43,8 +43,8 @@ def book_gym_session(browser, time, dry_run=False):
     wait_for_element_by(browser, 'btn-login', By.ID)
     browser.find_element_by_id('btn-login').click()
 
-    # select date one week from now
-    week_from_now = datetime.now() + timedelta(days=7)
+    # select date x days from now
+    week_from_now = datetime.now() + timedelta(days=day)
     week_from_now = week_from_now.strftime('%Y-%m-%d')
 
     logging.info(f'Selecting date {week_from_now}')
@@ -88,15 +88,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--dry', action='store_true',
-        help='dry-run'
+        help='run a dry-run - everything except for booking'
     )
     parser.add_argument(
         '--headless', action='store_true',
-        help='dry-run'
+        help='run in headless browser mode'
     )
     parser.add_argument(
         '--time-slot', type=str, default='6:00PM - 7:00PM',
-        help='time-slot. str format ex: "6:00PM - 7:00PM"'
+        help='desired time-slot. str format ex: "6:00PM - 7:00PM"'
+    )
+    parser.add_argument(
+        '--days', type=int, default=7,
+        help='how many days in the future to book'
     )
     args = parser.parse_args()
 
@@ -106,7 +110,7 @@ if __name__ == '__main__':
     browser = webdriver.Chrome(options=options)
 
     # book session
-    success = book_gym_session(browser, args.time_slot, args.dry)
+    success = book_gym_session(browser, args.days, args.time_slot, args.dry)
 
     # close browser & exit
     browser.close()
