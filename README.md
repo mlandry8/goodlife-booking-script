@@ -7,11 +7,12 @@ This script currently assumes you only have one gym favourited
 **Prerequisites**
 
 1. Chrome Webdriver: https://chromedriver.chromium.org/getting-started
+2. Python3 (tested with python3.8)
 
 **Setup**
 
 1. Run `cp .env.example .env`
-2. Fill in variables in newly created .env file with goodlife email and password
+2. Fill in variables in newly created `.env` file with goodlife email and password
 
 With runner shell script.
 
