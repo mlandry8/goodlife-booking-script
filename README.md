@@ -4,6 +4,10 @@ Quick & dirty script to help you book goodlife gym sessions before they fill up!
 
 This script currently assumes you only have one gym favourited
 
+set it up as a cronjob!
+
+`15 0 * * TUE,THU cd /ur/code/dir/goodlife-booking && ./runner.sh`
+
 **Prerequisites**
 
 1. Chrome Webdriver: https://chromedriver.chromium.org/getting-started
@@ -33,4 +37,3 @@ Alternativley, setup your venv and use the script manually.
 ```
 
 
-Note: you probably need to modify the runner slightly if you want to execute from a cronjob

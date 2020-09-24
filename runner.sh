@@ -1,5 +1,3 @@
-cd /home/mlandry8/Code/goodlife-booking/
-
 python -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
