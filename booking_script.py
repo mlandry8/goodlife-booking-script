@@ -13,6 +13,9 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
 from selenium.webdriver.chrome.options import Options
 
+class BookingException(Exception):
+    pass
+
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
@@ -29,7 +32,6 @@ def wait_for_element_by(browser, element_name, element_type):
         sleep(2)
     except TimeoutException:
         print ("Loading took too much time!")
-
 
 def book_gym_session(browser, day, time, dry_run=False):
     # navigate to login page (will redirect to bookings page)
@@ -49,23 +51,33 @@ def book_gym_session(browser, day, time, dry_run=False):
 
     logging.info(f'Selecting date {week_from_now}')
     wait_for_element_by(browser, 'date-tile', By.CLASS_NAME)
-    [
-        elem for elem in browser.find_elements_by_class_name('date-tile')
-        if elem.get_attribute('data-date') == week_from_now
-    ][0].click()
-
+    try:
+        [
+            elem for elem in browser.find_elements_by_class_name('date-tile')
+            if elem.get_attribute('data-date') == week_from_now
+        ][0].click()
+    except IndexError as e:
+        raise BookingException(f'Date {week_from_now} is unavailable') from e
 
     # select appropriate timeframe to book
     logging.info(f'Selecting session time {time}')
     wait_for_element_by(browser, 'cmp-button', By.CLASS_NAME)
     try:
-        book_time = [
+        [
             elem for elem in browser.find_elements_by_class_name('cmp-button')
             if elem.get_attribute('data-display') == time and not elem.get_attribute('disabled')
         ][0].click()
     except IndexError as e:
-        logging.error(f'Time {time} is fully booked')
-        return False
+        raise BookingException(f'Time {time} is unavailable') from e
+
+    # remove chat frame
+    browser.execute_script(
+        """
+        var element = document.querySelector(".five9-frame");
+        if (element)
+            element.parentNode.removeChild(element);
+        """
+    )
 
     # accept code of conduct
     logging.info(f'Agreeing to terms')
@@ -79,8 +91,6 @@ def book_gym_session(browser, day, time, dry_run=False):
     else:
         logging.info('** DRY RUN **')
     logging.info('Booking confirmed')
-
-    return True
 
 
 if __name__ == '__main__':
@@ -110,7 +120,12 @@ if __name__ == '__main__':
     browser = webdriver.Chrome(options=options)
 
     # book session
-    success = book_gym_session(browser, args.days, args.time_slot, args.dry)
+    try:
+        book_gym_session(browser, args.days, args.time_slot, args.dry)
+        success = True
+    except BookingException as e:
+        logging.error(e)
+        success = False
 
     # close browser & exit
     browser.close()
