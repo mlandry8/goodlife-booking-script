@@ -25,7 +25,7 @@ With runner shell script.
 
 Alternativley, setup your venv and use the script manually.
 
-4. `python booking_cript.py --headless --time-slot "6:00PM - 7:00PM" --days 7`
+4. `python booking_script.py --headless --time-slot "6:00PM - 7:00PM" --days 7`
 
 **Args**
 
