@@ -1,6 +1,6 @@
 # goodlife-booking-script
 
-UPDATE: I beleive goodlife has started to use a captcha check, so this prob won't work anymore. 
+UPDATE: I Goodlife has started to use a captcha check, so this prob won't work anymore. 
 
 Quick & dirty script to help you book goodlife gym sessions before they fill up!
 
