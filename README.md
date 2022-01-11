@@ -2,6 +2,8 @@
 
 UPDATE: I Goodlife has started to use a captcha check, so this prob won't work anymore. 
 
+--------
+
 Quick & dirty script to help you book goodlife gym sessions before they fill up!
 
 This script currently assumes you only have one gym favourited
